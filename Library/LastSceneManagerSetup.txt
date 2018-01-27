@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/AaronTesting.unity
+- path: Assets/Scenes/AaronTesting.unity
   isLoaded: 1
   isActive: 1

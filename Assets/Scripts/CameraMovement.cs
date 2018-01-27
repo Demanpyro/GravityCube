@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour {
 
     public Transform Player;
+    public PlayerMovement dir;
     public float mouseSensitivity = 100.0f;
     public float clampAngleY;
     private float clampUp;
@@ -22,17 +23,30 @@ public class CameraMovement : MonoBehaviour {
 
     void Update()
     {
+        
+
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = -Input.GetAxis("Mouse Y");
 
-        rotY += mouseX * mouseSensitivity * Time.deltaTime;
-        rotX += mouseY * mouseSensitivity * Time.deltaTime;
+        if (dir.gDir == "Down")
+        {
+            rotY -= mouseX * mouseSensitivity * Time.deltaTime;
+            rotX -= mouseY * mouseSensitivity * Time.deltaTime;
+        }
+        else
+        {
+            rotY += mouseX * mouseSensitivity * Time.deltaTime;
+            rotX += mouseY * mouseSensitivity * Time.deltaTime;
+        }
+        
 
         rotX = Mathf.Clamp(rotX, -clampAngleY + clampUp, clampAngleY);
 
-        Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
+        Vector3 originalRotation = Player.rotation.eulerAngles;
+
+        Quaternion localRotation = Quaternion.Euler(rotX, rotY, originalRotation.z);
         transform.rotation = localRotation;
-        Quaternion playerRotation = Quaternion.Euler(Player.rotation.x, rotY, 0.0f);
+        Quaternion playerRotation = Quaternion.Euler(originalRotation.x, rotY, originalRotation.z);
         Player.rotation = playerRotation;
     }
 }

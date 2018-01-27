@@ -6,6 +6,7 @@ using UnityEngine;
 public class BulletMovement : MonoBehaviour {
 
     public Rigidbody Player;
+    public PlayerMovement dir;
     public float force;
     public float bump;
 
@@ -61,7 +62,14 @@ public class BulletMovement : MonoBehaviour {
     {
         if (goPull)
         {
-            Player.velocity = (transform.up * force + (Vector3.up * bump));
+            if (dir.gDir == "Up")
+            {
+                Player.velocity = (transform.up * force + (Vector3.up * bump));
+            }
+            else if(dir.gDir == "Down")
+            {
+                Player.velocity = (transform.up * force + (-Vector3.up * bump));
+            }
             
             
             goPull = false;
@@ -69,7 +77,14 @@ public class BulletMovement : MonoBehaviour {
 
         if (goPush)
         {
-            Player.velocity = (-transform.up * force + (Vector3.up * bump));
+            if (dir.gDir == "Up")
+            {
+                Player.velocity = (-transform.up * force + (Vector3.up * bump));
+            }
+            else if(dir.gDir == "Down")
+            {
+                Player.velocity = (-transform.up * force + (-Vector3.up * bump));
+            }
             goPush = false;
         }
 

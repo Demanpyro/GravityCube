@@ -13,17 +13,20 @@ public class PlayerMovement : NetworkBehaviour
     public bool isWall;
     public bool crouch;
     public Transform groundCheck;
+    public CameraMovement cameraScale;
     //public Transform wallCheck;
 
     private Rigidbody rb;
 
     public Animator anim;
 
+    public string gDir = "";
+
     // Use this for initialization
     void Start()
     {
-
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = isLocalPlayer;
         rspeed = mspeed;
 
     }
@@ -37,8 +40,18 @@ public class PlayerMovement : NetworkBehaviour
             return;
         }
 
-        //isWall = Physics.Linecast(transform.position, wallCheck.position, 1 << LayerMask.NameToLayer("Wall"));
-        isGrounded = Physics.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (Screen.lockCursor)
+            {
+                Screen.lockCursor = false;
+            }
+            else
+                Screen.lockCursor = true;
+
+        }
+
+    //isWall = Physics.Linecast(transform.position, wallCheck.position, 1 << LayerMask.NameToLayer("Wall"));
+    isGrounded = Physics.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 
         if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
@@ -88,7 +101,14 @@ public class PlayerMovement : NetworkBehaviour
                 if (!crouch)
                 {
                     //print("jump");
-                    GetComponent<Rigidbody>().AddForce(Vector3.up * jumpHeight);
+                    if (gDir == "Up")
+                    {
+                        GetComponent<Rigidbody>().AddForce(Vector3.up * jumpHeight);
+                    }
+                    else if(gDir == "Down")
+                    {
+                        GetComponent<Rigidbody>().AddForce(-Vector3.up * jumpHeight);
+                    }
                     isGrounded = false;
                 }
             }
@@ -103,8 +123,23 @@ public class PlayerMovement : NetworkBehaviour
             Debug.Log("groundhit");
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            print(GetComponent<Rigidbody>().velocity);
-            print(GetComponent<Rigidbody>().angularVelocity);
+        }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (gDir == "")
+        {
+            if (col.gameObject.tag == "Down")
+            {
+                gDir = "Down";
+                transform.localRotation = Quaternion.Euler(0, 0, 180);
+                Physics.gravity = new Vector3(0, 9.8f, 0);
+            }
+            else if (col.gameObject.tag == "Up")
+            {
+                gDir = "Up";
+            }
         }
     }
 }

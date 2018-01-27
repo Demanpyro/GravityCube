@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Death
+  - Up
+  - Down
+  - Left
+  - Right
   layers:
   - Default
   - TransparentFX

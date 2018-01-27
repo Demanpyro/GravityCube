@@ -10,7 +10,7 @@ public class BulletMovement : MonoBehaviour {
     public float force;
     public float bump;
 
-    public Transform angle;
+    public GameObject particles;
 
     public BulletShot BulletScript;
     public bool isPush;
@@ -21,14 +21,20 @@ public class BulletMovement : MonoBehaviour {
     public float maxTime;
     public float timer;
 
-	
-	// Update is called once per frame
-	void Update () {
+
+    void Start()
+    {
+        particles.SetActive(false);
+    }
+
+    // Update is called once per frame
+    void Update () {
 
         if (BulletScript.Pull && isPull)
         {
             if (maxTime >= timer)
             {
+                particles.SetActive(true);
                 transform.position += transform.up * Time.deltaTime * speed;
                 timer += Time.deltaTime;
             }
@@ -45,6 +51,7 @@ public class BulletMovement : MonoBehaviour {
         {
             if (maxTime >= timer)
             {
+                particles.SetActive(true);
                 transform.position += transform.up * Time.deltaTime * speed;
                 timer += Time.deltaTime;
             }
@@ -92,6 +99,7 @@ public class BulletMovement : MonoBehaviour {
 
     public void ResetPos()
     {
+        particles.SetActive(false);
         transform.localPosition = Vector3.zero;
         GetComponent<MeshRenderer>().enabled = false;
         GetComponent<BoxCollider>().enabled = false;

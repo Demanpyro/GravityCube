@@ -7,6 +7,7 @@ public class PlayerMovement : NetworkBehaviour
 {
 
     [SerializeField] private int mspeed;
+    [SerializeField] private int rspeed;
     [SerializeField] private float jumpHeight = 5f;
     public bool isGrounded;
     public bool isWall;
@@ -21,6 +22,7 @@ public class PlayerMovement : NetworkBehaviour
     {
 
         rb = GetComponent<Rigidbody>();
+        rspeed = mspeed;
 
     }
 
@@ -48,13 +50,13 @@ public class PlayerMovement : NetworkBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
-            transform.position += transform.right * Time.deltaTime * mspeed;
+            transform.position += transform.right * Time.deltaTime * rspeed;
             //transform.Rotate(Vector3.up * Time.deltaTime * rspeed);
         }
 
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            transform.position -= transform.right * Time.deltaTime * mspeed;
+            transform.position -= transform.right * Time.deltaTime * rspeed;
             //transform.Rotate(-Vector3.up * Time.deltaTime * rspeed);
         }
 
@@ -70,6 +72,19 @@ public class PlayerMovement : NetworkBehaviour
                     isGrounded = false;
                 }
             }
+        }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        Debug.Log("groundhit");
+        if (isGrounded)
+        {
+            Debug.Log("groundhit");
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            print(GetComponent<Rigidbody>().velocity);
+            print(GetComponent<Rigidbody>().angularVelocity);
         }
     }
 }

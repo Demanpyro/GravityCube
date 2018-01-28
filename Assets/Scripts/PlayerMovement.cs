@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class PlayerMovement : NetworkBehaviour
 {
@@ -21,6 +22,8 @@ public class PlayerMovement : NetworkBehaviour
     public Animator anim;
     public BulletMovement bullet;
     public Camera cam;
+
+    public Text myText;
 
     [SyncVar]
     public int hitType;
@@ -193,6 +196,12 @@ public class PlayerMovement : NetworkBehaviour
         {
             hitType = 1;
             CmdMovePlayer();
+        }
+
+        if(col.gameObject.tag == "Lava")
+        {
+            myText.text = "You Lose!";
+
         }
     }
 }

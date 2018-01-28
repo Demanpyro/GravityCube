@@ -19,6 +19,10 @@ public class PlayerMovement : NetworkBehaviour
     private Rigidbody rb;
 
     public Animator anim;
+    public BulletMovement bullet;
+
+    [SyncVar]
+    public int hitType;
 
     public string gDir = "";
 
@@ -120,6 +124,24 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    void RpcMovePlayer()
+    {
+        if (isLocalPlayer)
+        {
+            if(hitType == 0)
+            {
+                GetComponent<Rigidbody>().velocity = (-transform.up * bullet.force + (Vector3.up * bullet.bump));
+            }
+            else if(hitType == 1)
+            {
+                GetComponent<Rigidbody>().velocity = (transform.up * bullet.force + (Vector3.up * bullet.bump));
+            }
+
+            hitType = 3;
+        }
+    }
+
     void OnCollisionEnter(Collision col)
     {
         Debug.Log("groundhit");
@@ -145,6 +167,17 @@ public class PlayerMovement : NetworkBehaviour
             {
                 gDir = "Up";
             }
+        }
+
+        if(col.gameObject.tag == "Pull")
+        {
+            hitType = 0;
+
+            RpcMovePlayer();
+        }
+        if (col.gameObject.tag == "Push")
+        {
+            hitType = 1;
         }
     }
 }

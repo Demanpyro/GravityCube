@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 
-public class BulletMovement : MonoBehaviour {
+public class BulletMovement : NetworkBehaviour {
 
     public Rigidbody Player;
     public PlayerMovement dir;
@@ -107,24 +108,7 @@ public class BulletMovement : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Player")
-        {
-            if (isPull)
-            {
-                Rigidbody Oplayer = col.GetComponent<Rigidbody>();
-                Oplayer.velocity = (-transform.up * force + (Vector3.up * bump));
-                BulletScript.Pull = false;
-            }
-
-            if (isPush)
-            {
-                Rigidbody Oplayer = col.GetComponent<Rigidbody>();
-                Oplayer.velocity = (transform.up * force + (Vector3.up * bump));
-                BulletScript.Push = false;
-            }
-
-        }
-        else
+        if (col.gameObject.tag != "Player")
         {
             if (isPull)
             {

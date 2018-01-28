@@ -33,6 +33,7 @@ public class PlayerMovement : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
+        myText = GameObject.Find("Text").GetComponent<Text>();
         rb = GetComponent<Rigidbody>();
         rb.useGravity = isLocalPlayer;
         rspeed = mspeed;
@@ -198,9 +199,9 @@ public class PlayerMovement : NetworkBehaviour
             CmdMovePlayer();
         }
 
-        if(col.gameObject.tag == "Lava")
+        if(col.gameObject.tag == "Fire")
         {
-            myText.text = "You Lose!";
+            myText.text = "Game Over".ToString();
 
         }
     }

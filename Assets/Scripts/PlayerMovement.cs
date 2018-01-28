@@ -41,12 +41,17 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (Cursor.lockState == CursorLockMode.None)
+            if (Cursor.visible)
             {
-                Screen.lockCursor = false;
+                Cursor.visible = false;
+                Screen.lockCursor = true;
             }
             else
-                Screen.lockCursor = true;
+            {
+                Screen.lockCursor = false;
+                Cursor.visible = true;
+            }
+
 
         }
 

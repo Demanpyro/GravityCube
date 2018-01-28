@@ -8,15 +8,17 @@ public class SpawnPlatform : NetworkBehaviour {
 	public GameObject objectToSpawn;
 	public Transform SpawnPoint;
 
-	private void Update()
+
+    void Start()
+    {
+        CmdSpawnPlatform();
+    }
+
+    void Update()
 	{
 		if(!isLocalPlayer)
 		{return; }
 
-		if(Input.GetKey(KeyCode.P))
-		{
-			CmdSpawnPlatform ();
-		}
 	}
 
 	[Command]

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine.Networking;
 
 public class CameraMovement : MonoBehaviour {
 
@@ -23,7 +24,10 @@ public class CameraMovement : MonoBehaviour {
 
     void Update()
     {
-        
+        //if (!isLocalPlayer)
+        //{
+         //   return;
+        //}
 
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = -Input.GetAxis("Mouse Y");

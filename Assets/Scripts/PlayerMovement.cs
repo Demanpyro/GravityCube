@@ -20,6 +20,7 @@ public class PlayerMovement : NetworkBehaviour
 
     public Animator anim;
     public BulletMovement bullet;
+    public Camera cam;
 
     [SyncVar]
     public int hitType;
@@ -41,6 +42,8 @@ public class PlayerMovement : NetworkBehaviour
 
         if (!isLocalPlayer)
         {
+            GetComponent<Rigidbody>().isKinematic = true;
+            cam.enabled = false;
             return;
         }
 
@@ -124,6 +127,12 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
+    [Command]
+    void CmdMovePlayer()
+    {
+        RpcMovePlayer();
+    }
+
     [ClientRpc]
     void RpcMovePlayer()
     {
@@ -144,6 +153,8 @@ public class PlayerMovement : NetworkBehaviour
 
     void OnCollisionEnter(Collision col)
     {
+        if (!hasAuthority)
+            return;
         Debug.Log("groundhit");
         if (isGrounded)
         {
@@ -153,8 +164,11 @@ public class PlayerMovement : NetworkBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider col)
+        void OnTriggerEnter(Collider col)
     {
+        if (!hasAuthority)
+            return;
+
         if (gDir == "")
         {
             if (col.gameObject.tag == "Down")
@@ -173,11 +187,12 @@ public class PlayerMovement : NetworkBehaviour
         {
             hitType = 0;
 
-            RpcMovePlayer();
+            CmdMovePlayer();
         }
         if (col.gameObject.tag == "Push")
         {
             hitType = 1;
+            CmdMovePlayer();
         }
     }
 }

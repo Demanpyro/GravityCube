@@ -33,7 +33,7 @@ public class PlayerMovement : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-        myText = GameObject.Find("Text").GetComponent<Text>();
+        //myText = GameObject.Find("Text").GetComponent<Text>();
         rb = GetComponent<Rigidbody>();
         rb.useGravity = isLocalPlayer;
         rspeed = mspeed;
